@@ -1,36 +1,48 @@
-import { UserService } from './../services/UserService';
+import { validate } from 'class-validator';
+import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { NextFunction, Request, Response } from 'express';
 import { User } from '../entity/User';
 
 export class UserController {
-    userService: UserService;
-    constructor() {
-        this.userService = new UserService();
-    }
-
     public async all(req: Request, response: Response) {
-        let users = await this.userService.GetAll();
-        return response.status(200).json(users);
+        let users = await getRepository(User).find({
+            select: ['Id', 'Email', 'UserName'],
+        });
+        response.send(users);
     }
 
     public async save(request: Request, response: Response) {
-        if (Object.keys(request.body).length === 0) {
-            return response.status(400).end();
-        }
         let user = User.create(request.body as User);
-        if (!user || Object.keys(user).length === 0) {
-            return response.status(400).end();
+
+        const errors = await validate(user);
+        if (errors.length > 0) {
+            response.status(400).send(errors);
+            return;
         }
-        user = await this.userService.Save(user);
-        return user
-            ? response.status(200).json(user)
-            : response.status(400).json(user);
+
+        user.hashPassword();
+        const userRepository = getRepository(User);
+        try {
+            await userRepository.save(user);
+        } catch (e) {
+            response.status(409).send('username or email already in use');
+            return;
+        }
+
+        response.status(201).send('User created');
     }
 
     public async get(request: Request, response: Response) {
         const userId = request.params['userId'];
-        let user = await this.userService.Get(userId);
-        return response.status(200).json(user);
+
+        const userRepository = getRepository(User);
+        try {
+            const user = await userRepository.findOneOrFail(userId, {
+                select: ['Id', 'Email', 'UserName'],
+            });
+            response.send(user);
+        } catch (error) {
+            response.status(404).send('User not found');
+        }
     }
 }
