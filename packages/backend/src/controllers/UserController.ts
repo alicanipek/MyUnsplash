@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm';
 import { User } from '../entity/User';
 
 export class UserController {
-    public async all(req: Request, response: Response) {
+    public async all(_: Request, response: Response) {
         let users = await getRepository(User).find({
             select: ['Id', 'Email', 'UserName'],
         });

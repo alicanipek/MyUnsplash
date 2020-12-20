@@ -1,29 +1,23 @@
 import bcrypt from 'bcryptjs';
-import { Min, MinLength } from 'class-validator';
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    BaseEntity,
-    Unique,
-} from 'typeorm';
+import { IsEmail, IsNotEmpty, Length } from 'class-validator';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-@Unique(['UserName'])
-@Unique(['Email'])
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
-    Id: string;
+    Id!: string;
 
-    @Column()
-    @MinLength(3)
-    UserName: string;
+    @Column({ unique: true })
+    @Length(3, 20)
+    UserName!: string;
 
-    @Column()
-    Email: string;
+    @Column({ unique: true })
+    @IsEmail()
+    Email!: string;
 
-    @Column()
-    Password: string;
+    @Column({ nullable: false })
+    @IsNotEmpty()
+    Password!: string;
 
     hashPassword() {
         this.Password = bcrypt.hashSync(this.Password, 12);

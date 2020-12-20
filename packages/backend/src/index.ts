@@ -3,13 +3,16 @@ import { router } from './routes/Routes';
 import express from 'express';
 import { createConnection, ConnectionOptions } from 'typeorm';
 import * as bodyParser from 'body-parser';
-import * as ormconfig from '../ormconfig.json';
+import ormconfig from '../ormconfig.js';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 async function main() {
     createConnection(ormconfig as ConnectionOptions)
-        .then(async (connection) => {
+        .then(async () => {
             app.use(bodyParser.json());
             app.use(cors());
             app.use('/api', router);
