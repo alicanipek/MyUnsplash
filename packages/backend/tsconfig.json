@@ -22,6 +22,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "skipLibCheck": true,
-        "allowJs": true
+        "allowJs": true,
+        "typeRoots": ["./types"]
     }
 }

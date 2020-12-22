@@ -1,8 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
-import * as jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
-import jwtSecret from '../config/JwtSecret';
 import { User } from '../entity/User';
 
 export class AuthController {
@@ -36,15 +34,21 @@ export class AuthController {
             response.status(401).send('password wrong');
             return;
         }
-        console.log(jwtSecret.jwt_secret);
-        //Sing JWT, valid for 1 hour
-        const token = jwt.sign(
-            { Id: user.Id, UserName: user.UserName },
-            jwtSecret.jwt_secret,
-            { expiresIn: '1h' }
-        );
+
+        request.session.user = user;
 
         //Send the jwt in the response
-        response.send(token);
+        response.sendStatus(200);
+    }
+
+    async logout(request: Request, response: Response) {
+        if (request.session.user && request.cookies.user_sid) {
+            response.clearCookie('user_sid');
+            response.sendStatus(200);
+            return;
+        } else {
+            response.sendStatus(401);
+            return;
+        }
     }
 }

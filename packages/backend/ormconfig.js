@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
     type: 'postgres',
     port: process.env.PORT,

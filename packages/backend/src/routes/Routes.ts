@@ -1,6 +1,6 @@
 import express from 'express';
 import { authController, userController } from '../controllers';
-import { checkJwt } from '../middlewares/Jwt';
+import { checkAuth } from '../middlewares/AuthChecker';
 
 export const router = express.Router({
     strict: true,
@@ -8,8 +8,10 @@ export const router = express.Router({
 
 router.post('/login', authController.login);
 
-router.get('/users', [checkJwt], userController.all);
+router.post('/logout', [checkAuth], authController.logout);
+
+router.get('/users', [checkAuth], userController.all);
 
 router.post('/users', userController.save);
 
-router.get('/user/:userId', [checkJwt], userController.get);
+router.get('/user/:userId', [checkAuth], userController.get);
