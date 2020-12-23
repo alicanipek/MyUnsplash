@@ -1,17 +1,14 @@
+import { PostRouter } from './PostRoutes';
+import { CategoryRouter } from './CategoryRoutes';
 import express from 'express';
-import { authController, userController } from '../controllers';
-import { checkAuth } from '../middlewares/AuthChecker';
+import { UserRouter } from './UserRoutes';
+import { AuthRouter } from './AuthRoutes';
 
 export const router = express.Router({
     strict: true,
 });
 
-router.post('/login', authController.login);
-
-router.post('/logout', [checkAuth], authController.logout);
-
-router.get('/users', [checkAuth], userController.all);
-
-router.post('/users', userController.save);
-
-router.get('/user/:userId', [checkAuth], userController.get);
+router.use('/users', UserRouter);
+router.use('/auth', AuthRouter);
+router.use('/category', CategoryRouter);
+router.use('/posts', PostRouter);

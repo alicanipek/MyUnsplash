@@ -1,6 +1,13 @@
 import bcrypt from 'bcryptjs';
 import { IsEmail, IsNotEmpty, Length } from 'class-validator';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Post } from './Post';
 
 @Entity()
 export class User extends BaseEntity {
@@ -18,6 +25,9 @@ export class User extends BaseEntity {
     @Column({ nullable: false })
     @IsNotEmpty()
     Password!: string;
+
+    @OneToMany(() => Post, (Post) => Post.User)
+    Posts: Post[];
 
     hashPassword() {
         this.Password = bcrypt.hashSync(this.Password, 12);

@@ -49,7 +49,7 @@ createConnection(ormconfig as ConnectionOptions)
         };
         app.use(cors(corsOptions));
 
-        app.use('/api', router);
+        app.use('/', router);
 
         app.listen(4000, () => {
             console.log(`Example app listening at http://localhost:4000`);
