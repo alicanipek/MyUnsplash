@@ -39,7 +39,6 @@ export class UserController {
         try {
             const user = await userRepository.findOneOrFail(userId, {
                 select: ['Id', 'Email', 'UserName'],
-                relations: ['Posts'],
             });
             response.send(user);
         } catch (error) {

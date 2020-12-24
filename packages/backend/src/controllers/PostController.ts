@@ -6,11 +6,17 @@ import { Post } from './../entity/Post';
 
 export class PostController {
     async save(request: Request, response: Response) {
-        console.log(request.body['Categories']);
+        if (!request.file) {
+            response.sendStatus(400);
+            return;
+        }
         let post = Post.create(request.body as Post);
 
+        let file = request.file;
+
         post.User = request.session.user!;
-        post.Categories = request.body['Categories'] as Category[];
+        post.Categories = JSON.parse(request.body['Categories']) as Category[];
+        post.ImagePath = file.path;
 
         const errors = await validate(post);
         if (errors.length > 0) {
@@ -48,12 +54,20 @@ export class PostController {
 
     public async get(request: Request, response: Response) {
         const postId = request.params['postId'];
-
-        const postRepository = getRepository(Post);
         try {
-            const post = await postRepository.findOneOrFail(postId, {
-                relations: ['Categories', 'User'],
-            });
+            const post = await getRepository(Post)
+                .createQueryBuilder('Post')
+                .where({ Id: postId })
+                .leftJoin('Post.User', 'User')
+                .leftJoin('Post.Categories', 'Category')
+                .addSelect([
+                    'Category.Id',
+                    'Category.Name',
+                    'User.Id',
+                    'User.UserName',
+                    'User.Email',
+                ])
+                .getMany();
             response.send(post);
         } catch (error) {
             response.status(404).send('post not found');
