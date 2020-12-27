@@ -2,7 +2,6 @@ import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../entity/User';
-
 export class AuthController {
     async login(request: Request, response: Response) {
         //Check if username and password are set
@@ -37,17 +36,31 @@ export class AuthController {
 
         request.session.user = user;
 
-        //Send the jwt in the response
         response.sendStatus(200);
     }
 
     async logout(request: Request, response: Response) {
         if (request.session.user && request.cookies.user_sid) {
-            response.clearCookie('user_sid');
-            response.sendStatus(200);
-            return;
+            request.session.destroy((err) => {
+                if (err) {
+                    response.sendStatus(500);
+                } else {
+                    response.clearCookie('user_sid');
+                    response.sendStatus(200);
+                }
+            });
         } else {
             response.sendStatus(401);
+            return;
+        }
+    }
+
+    async loggedIn(request: Request, response: Response) {
+        if (request.session.user && request.cookies.user_sid) {
+            response.status(200).send(true);
+            return;
+        } else {
+            response.status(200).send(false);
             return;
         }
     }

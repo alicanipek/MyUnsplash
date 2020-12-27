@@ -26,12 +26,15 @@ createConnection(ormconfig as ConnectionOptions)
             store: new RedisStore({
                 client: redis as any,
             }),
-            secret: process.env.REDIS_SECRET!,
             resave: false,
+            rolling: true,
+            secret: process.env.REDIS_SECRET!,
             saveUninitialized: false,
             cookie: {
-                httpOnly: false,
-                maxAge: 1000 * 60 * 60 * 24 * 7 * 365, // 7 years
+                path: '/',
+                domain: 'localhost',
+                httpOnly: true,
+                expires: new Date(Date.now() + 900000),
             },
         };
 
@@ -47,7 +50,7 @@ createConnection(ormconfig as ConnectionOptions)
 
         const corsOptions = {
             credentials: true,
-            origin: 'http://localhost:3000',
+            origin: 'http://localhost:1337',
         };
         app.use(cors(corsOptions));
 
