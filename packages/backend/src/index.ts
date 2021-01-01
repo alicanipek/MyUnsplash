@@ -31,10 +31,8 @@ createConnection(ormconfig as ConnectionOptions)
             secret: process.env.REDIS_SECRET!,
             saveUninitialized: false,
             cookie: {
-                path: '/',
-                domain: 'localhost',
                 httpOnly: true,
-                expires: new Date(Date.now() + 900000),
+                maxAge: 1000 * 60 * 15, // 7 years
             },
         };
 

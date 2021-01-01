@@ -8,6 +8,10 @@ export const UserRouter = express.Router({
 
 UserRouter.get('/', [checkAuth], userController.all);
 
+UserRouter.post('/me', [checkAuth], userController.me);
+
 UserRouter.post('/', userController.save);
 
 UserRouter.get('/:userId', [checkAuth], userController.get);
+
+UserRouter.post('/confirm/:token', userController.confirm);

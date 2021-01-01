@@ -26,6 +26,9 @@ export class User extends BaseEntity {
     @IsNotEmpty()
     Password!: string;
 
+    @Column('bool', { default: false })
+    Confirmed!: boolean;
+
     @OneToMany(() => Post, (Post) => Post.User)
     Posts: Post[];
 

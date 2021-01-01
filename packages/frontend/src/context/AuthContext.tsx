@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { User } from '../model/User';
-import { authService } from '../service';
+import { authService, userService } from '../service';
 
 interface IAuthContext {
+    user: User | undefined;
     isAuthenticated: boolean;
     isLoading: boolean;
     login: (user: User) => Promise<boolean>;
@@ -11,6 +12,7 @@ interface IAuthContext {
 }
 
 const initialContext = {
+    user: undefined,
     isAuthenticated: false,
     isLoading: true,
     login: () => new Promise<boolean>(() => false),
@@ -22,6 +24,7 @@ export const AuthContext = React.createContext<IAuthContext>(initialContext);
 export default function Auth({ children }: { children: React.ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [user, setUser] = useState<User>({});
 
     useEffect(() => {
         checkAuth();
@@ -29,27 +32,38 @@ export default function Auth({ children }: { children: React.ReactNode }) {
 
     const checkAuth = async () => {
         let t = await authService.loggedIn();
+
         setIsAuthenticated(t);
         setIsLoading(false);
+        if (t) {
+            let u = await userService.me();
+            setUser(u.data);
+        }
     };
 
     const login = async (user: User) => {
         let t = await authService.login(user);
-
         setIsAuthenticated(t);
+        if (t) {
+            let u = await userService.me();
+            setUser(u.data);
+        }
         return t;
     };
 
     const logout = () => {
         authService
             .logout()
-            .then(() => setIsAuthenticated(false))
+            .then(() => {
+                setIsAuthenticated(false);
+                setUser({});
+            })
             .catch((err) => alert(err));
     };
 
     return (
         <AuthContext.Provider
-            value={{ isAuthenticated, isLoading, login, logout }}
+            value={{ isAuthenticated, isLoading, user, login, logout }}
         >
             {children}
         </AuthContext.Provider>
