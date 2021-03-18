@@ -3,7 +3,7 @@ import { useContext, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { AuthContext } from '../context/AuthContext';
 import { User } from '../model/User';
-import { RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import FormGroup from '../components/FormGroup';
 import TextBox from '../components/TextBox';
 import Button from '../components/Button';
@@ -39,13 +39,13 @@ const Login = ({ history }: RouteComponentProps) => {
             <div className="container mx-auto flex flex-row justify-center items-center content-center h-screen">
                 <div className="w-2/5">
                     <div className="flex flex-col items-center">
-                        <a href="/">
+                        <Link to="/">
                             <LogoBlack
                                 width={64}
                                 height={64}
                                 className="mb-6"
                             ></LogoBlack>
-                        </a>
+                        </Link>
                         <div className="text-3xl font-bold mb-2">Login</div>
                         <p className="mb-8">Welcome back.</p>
                     </div>
@@ -71,12 +71,12 @@ const Login = ({ history }: RouteComponentProps) => {
                         <div>
                             <p>
                                 Don't have an account?{' '}
-                                <a
-                                    href="/register"
+                                <Link
+                                    to="register"
                                     className="underline text-gray-500"
                                 >
                                     Join
-                                </a>
+                                </Link>
                             </p>
                         </div>
                     </div>

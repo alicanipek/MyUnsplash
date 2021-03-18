@@ -4,7 +4,6 @@ import { getRepository } from 'typeorm';
 import { User } from '../entity/User';
 export class AuthController {
     async login(request: Request, response: Response) {
-        //Check if username and password are set
         let userRequest = User.create(request.body as User);
 
         if (!userRequest.UserName || !userRequest.Password) {
@@ -13,7 +12,6 @@ export class AuthController {
         }
 
         let user = new User();
-        //Get user from database
         const userRepository = getRepository(User);
         try {
             user = await userRepository.findOneOrFail({
@@ -28,7 +26,6 @@ export class AuthController {
             userRequest.Password,
             user.Password
         );
-        //Check if encrypted password match
         if (!checkPassword) {
             response.status(401).send('password wrong');
             return;

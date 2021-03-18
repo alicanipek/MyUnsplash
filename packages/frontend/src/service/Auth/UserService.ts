@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from 'axios';
 import { User } from '../../model/User';
 import { Service } from '../Service';
 

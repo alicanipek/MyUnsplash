@@ -1,7 +1,7 @@
 {
     "name": "@mu/backend",
     "version": "0.0.1",
-    "description": "Awesome project developed with TypeORM.",
+    "description": "My Unsplash Backend",
     "private": "true",
     "devDependencies": {
         "@types/bcryptjs": "^2.4.2",

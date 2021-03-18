@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { User } from '../../model/User';
 import { Service } from '../Service';
 
