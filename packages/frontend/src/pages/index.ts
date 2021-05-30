@@ -5,4 +5,6 @@ import Posts from './Posts';
 import Register from './Register';
 import ConfirmUser from './ConfirmUser';
 
-export { Home, Login, Logout, Posts, Register, ConfirmUser };
+export {
+  Home, Login, Logout, Posts, Register, ConfirmUser,
+};

@@ -1,11 +1,11 @@
+import express from 'express';
 import { PostRouter } from './PostRoutes';
 import { CategoryRouter } from './CategoryRoutes';
-import express from 'express';
 import { UserRouter } from './UserRoutes';
 import { AuthRouter } from './AuthRoutes';
 
 export const router = express.Router({
-    strict: true,
+  strict: true,
 });
 
 router.use('/users', UserRouter);

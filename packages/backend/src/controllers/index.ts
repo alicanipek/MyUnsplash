@@ -8,4 +8,6 @@ const authController = new AuthController();
 const categoryController = new CategoryController();
 const postController = new PostController();
 
-export { userController, authController, categoryController, postController };
+export {
+  userController, authController, categoryController, postController,
+};

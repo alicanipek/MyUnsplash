@@ -3,7 +3,7 @@ import { authController } from '../controllers';
 import { checkAuth } from '../middlewares/AuthChecker';
 
 export const AuthRouter = express.Router({
-    strict: true,
+  strict: true,
 });
 
 AuthRouter.post('/login', authController.login);

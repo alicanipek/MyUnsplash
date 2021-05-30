@@ -3,7 +3,7 @@ import { userController } from '../controllers';
 import { checkAuth } from '../middlewares/AuthChecker';
 
 export const UserRouter = express.Router({
-    strict: true,
+  strict: true,
 });
 
 UserRouter.get('/', [checkAuth], userController.all);

@@ -4,10 +4,10 @@ import { RouteComponentProps } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 export default function Logout({ history }: RouteComponentProps) {
-    const { logout } = useContext(AuthContext);
-    useEffect(() => {
-        logout();
-        history.push('/');
-    }, []);
-    return <div></div>;
+  const { logout } = useContext(AuthContext);
+  useEffect(() => {
+    logout();
+    history.push('/');
+  }, []);
+  return <div />;
 }

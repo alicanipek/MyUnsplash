@@ -3,7 +3,7 @@ import { categoryController } from '../controllers';
 import { checkAuth } from '../middlewares/AuthChecker';
 
 export const CategoryRouter = express.Router({
-    strict: true,
+  strict: true,
 });
 
 CategoryRouter.get('/', [checkAuth], categoryController.all);

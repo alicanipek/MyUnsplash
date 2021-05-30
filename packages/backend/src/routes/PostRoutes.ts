@@ -1,10 +1,10 @@
-import { upload } from './../services/uploader';
 import express from 'express';
+import { upload } from '../services/uploader';
 import { postController } from '../controllers';
 import { checkAuth } from '../middlewares/AuthChecker';
 
 export const PostRouter = express.Router({
-    strict: true,
+  strict: true,
 });
 
 PostRouter.get('/', [checkAuth], postController.all);
